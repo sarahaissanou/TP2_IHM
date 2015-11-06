@@ -316,7 +316,15 @@
 					 , originalMatrix, point_init_par_rapport_node
 					 , currentMatrix
 					 , x, y) {
-		// TO BE DONE
+		currentMatrix.e = x-currentMatrix.a * point_init_par_rapport_node.x - currentMatrix.c * point_init_par_rapport_node.y;
+		currentMatrix.f = y-currentMatrix.b * point_init_par_rapport_node.x - currentMatrix.d * point_init_par_rapport_node.y;
+		node.style.transform= "matrix("
+							+ currentMatrix.a + ","
+							+ currentMatrix.b + ","
+							+ currentMatrix.c + ","
+							+ currentMatrix.d + ","
+							+ currentMatrix.e + ","
+							+ currentMatrix.f + ")";
 	}
 
 	//______________________________________________________________________________________________________________________
