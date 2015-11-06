@@ -333,7 +333,31 @@
 						 , pt_init_1, pt_current_1
 						 , pt_init_2, pt_current_2
 						 ) {
-		// TO BE DONE
+		
+		
+		var dx  = pt_init_2.x  - pt_init_1.x;
+		var dy  = pt_init_2.y  - pt_init_1.y;
+		var dx2 = pt_current_2.x - pt_current_1.x;
+		var dy2 = pt_current_2.y - pt_current_1.y;
+		
+		var s = (dy2/dy - dx2/dx)  / (dy/dx + dx/dy);
+		var c = (dx2 + s * dy)/dx;
+		currentMatrix.e = pt_current_1.x - c * pt_init_1.x + s * pt_init_1.y;
+		currentMatrix.f = pt_current_1.y - s * pt_init_1.x - c * pt_init_1.y;
+		
+		currentMatrix.a = c;
+		currentMatrix.b = s;
+		currentMatrix.c = -s;
+		currentMatrix.d = c;
+		
+		node.style.transform= "matrix("
+							+ currentMatrix.a + ","
+							+ currentMatrix.b + ","
+							+ currentMatrix.c + ","
+							+ currentMatrix.d + ","
+							+ currentMatrix.e + ","
+							+ currentMatrix.f + ")";	
+		
 	}
 
 	//______________________________________________________________________________________________________________________
