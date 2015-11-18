@@ -53,16 +53,59 @@ var automataRotoZoom = {
 						 break;
 					 case "press":
 						 console.log("drag press with", touch.identifier);
-						 
+						 conf.originalMatrix	= transfo.getMatrixFromString( style.transform );
+					     conf.originalMatrixInv	= conf.originalMatrix.inverse();
+					     
 						 configOfTouchId[ touch.identifier ] = conf;
+						 conf.touchesId[touch.identifier] = {
+						  point			: transfo.getPoint(touch.pageX, touch.pageY).matrixTransform( conf.originalMatrixInv )
+						, currentPoint	: transfo.getPoint(touch.pageX, touch.pageY)
+						};
 						 conf.state = "rotozoom";
 						 break;
 					}
 				},
 	rotozoom: function(conf, event, touch) {
-				 // TO BE DONE
-				 console.log( "automataRotoZoom::rotozoom", conf, event);
-				}
+		
+				switch(event) {
+					 case "release":
+						 console.log("rotozoom release of", touch.identifier);
+						 delete configOfTouchId[touch.identifier];
+						 delete conf.touchesId[touch.identifier];
+						 conf.state		= "drag";
+						 break;
+					 case "move":
+						 console.log("rotozoom with", touch.identifier);
+						 conf.touchesId[touch.identifier].currentPoint = transfo.getPoint(touch.pageX, touch.pageY);
+						 configOfTouchId[ touch.identifier ] = conf;
+						 transfo.rotoZoomNode( conf.node , conf.originalMatrix, conf.currentMatrix
+												, conf.touchesId[0].point, conf.touchesId[0].currentPoint
+												, conf.touchesId[1].point, conf.touchesId[1].currentPoint
+										 );
+						 break;
+					}
+				 
+				 //~ console.log( "automataRotoZoom::nothing", conf, event);
+					 //~ var style = window.getComputedStyle( conf.node );
+					 //~ conf.originalMatrix	= transfo.getMatrixFromString( style.transform );
+					 //~ conf.originalMatrixInv	= conf.originalMatrix.inverse();
+					 //~ conf.currentMatrix		= transfo.getMatrixFromString( style.transform );
+					 //~ // console.log(style.transform, conf.originalMatrix);
+					 //~ // Compute touch point
+					 //~ conf.touchesId[touch.identifier] = {
+						  //~ point			: transfo.getPoint(touch.pageX, touch.pageY).matrixTransform( conf.originalMatrixInv )
+						//~ , currentPoint	: transfo.getPoint(touch.pageX, touch.pageY)
+						//~ };
+					 //~ configOfTouchId[ touch.identifier ] = conf;
+					 //~ // Next state
+					 //~ conf.state = "drag";
+					 //~ conf.node.style.zIndex = zIndex++;				 
+				 
+				 //~ console.log( "automataRotoZoom::rotozoom", conf, event);
+				 
+				 
+				 
+				},
 };
 
 

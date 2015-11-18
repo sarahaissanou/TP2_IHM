@@ -127,7 +127,23 @@
 						}
 					},
 		rotozoom: function(conf, event, touch) {
-					 // TO BE DONE
+					 
+					 console.log( "automataRotoZoom::nothing", conf, event);
+						 var style = window.getComputedStyle( conf.node );
+						 conf.originalMatrix	= transfo.getMatrixFromString( style.transform );
+						 conf.originalMatrixInv	= conf.originalMatrix.inverse();
+						 conf.currentMatrix		= transfo.getMatrixFromString( style.transform );
+						 // console.log(style.transform, conf.originalMatrix);
+						 // Compute touch point
+						 conf.touchesId[touch.identifier] = {
+							  point			: transfo.getPoint(touch.pageX, touch.pageY).matrixTransform( conf.originalMatrixInv )
+							, currentPoint	: transfo.getPoint(touch.pageX, touch.pageY)
+							};
+						 configOfTouchId[ touch.identifier ] = conf;
+						 // Next state
+						 conf.state = "drag";
+						 conf.node.style.zIndex = zIndex++;				 
+					 
 					 console.log( "automataRotoZoom::rotozoom", conf, event);
 					}
 	};
@@ -272,6 +288,7 @@
 		}
 		L.forEach( multiTouch );
 	};
+
 
 /***/ },
 /* 6 */
